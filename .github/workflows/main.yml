@@ -22,7 +22,7 @@ jobs:
     env:
       Greeting: Hi
     steps:
-      - name: "Say Hello Mona it's Monday"
+      - name: "Say Hello Mona it's Monday Maryam"
         run: echo "$Greeting $First_Name. Today is $DAY_OF_WEEK!"
         env:
           First_Name: Mona
