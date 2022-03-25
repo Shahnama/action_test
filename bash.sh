@@ -14,10 +14,7 @@ fi
 
 
 
-# PLAYSTORE_TRACK=${{ secrets.API_KEY }}
-# AUTH_TOKEN=${{ secrets.API_KEY }}
-# AUTH_ISS=${{ secrets.API_KEY }}
-# AUTH_AUD=${{ secrets.API_KEY }}
+
 
 # echo $PLAYSTORE_TRACK
 # echo $AUTH_TOKEN
@@ -65,7 +62,6 @@ JWT_PART_2=$(echo -n "$JWT_SIGNING" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
 
 echo $JWT_CLAIMS
 
-exit 
 HTTP_RESPONSE_TOKEN=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" \
   --header "Content-type: application/x-www-form-urlencoded" \
   --request POST \
