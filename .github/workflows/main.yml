@@ -22,9 +22,6 @@ jobs:
     env:
       Greeting: Hi
 
-    outputs:
-      output1: ${{ steps.01.outputs.output }}
-
     steps:
       - uses: actions/checkout@v3.0.0
       
