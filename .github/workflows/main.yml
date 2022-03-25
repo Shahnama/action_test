@@ -37,7 +37,7 @@ jobs:
 
       - name: "JWT CLAIM"
         run: |  
-          echo "${{ env.JWT_HEADER }}"
+          echo "$JWT_HEADER"
           jwt_claims()
           {
             cat <<EOF
@@ -53,6 +53,8 @@ jobs:
           JWT_CLAIMS=$(echo -n "$(jwt_claims)" | openssl base64 -e)
           JWT_PART_1=$(echo -n "$JWT_HEADER.$JWT_CLAIMS" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
           echo $JWT_PART_1
+        env:
+          JWT_HEADER = "${{ env.JWT_HEADER }}"
 
       - name: "Sign JWT"
         run:  |
