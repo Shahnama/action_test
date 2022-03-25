@@ -61,12 +61,12 @@ jobs:
           JWT_PART_1=$(echo -n "$JWT_HEADER.$JWT_CLAIMS" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
           echo $JWT_PART_1
           export JWT_PART_1=$JWT_PART_1
-          echo "::set-env name=$JWT_PART_1::$$JWT_PART_1"
+          echo "::set-output name=$JWT_PART_1::$$JWT_PART_1"
 
 
       - name: "Sign JWT"
         run:  |
-          echo "JWT_PART_1 -> $JWT_PART_1"
+          echo "JWT_PART_1 -> ${{ steps.vars.outputs.JWT_PART_1 }}"
           echo "$JWT_PART_1" > message.bin
           openssl dgst -binary -sha256 -sign privatekey.pem  -out jwt_sign.bin  message.bin
           JWT_SIGNING=$(cat jwt_sign.bin | openssl base64 -e )
