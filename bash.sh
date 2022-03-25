@@ -3,6 +3,7 @@
 # Name variables
 PRIVATE_KEY=$1
 PLAYSTORE_KEY=$2
+PLAYSTORE_TRACK=$3
 APK_PATH=$(find . -name "*.aab")
 
 # Safety checks
@@ -125,7 +126,7 @@ post_data_assign_track()
 {
   cat <<EOF
 {
-  "track": "${{PLAYSTORE_TRACK}}",
+  "track": "$PLAYSTORE_TRACK",
   "releases": [
     {
       "versionCodes": [

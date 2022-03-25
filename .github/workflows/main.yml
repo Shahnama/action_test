@@ -22,10 +22,9 @@ jobs:
       
       - name: "Publish Bundles"
         run: |
-          PLAYSTORE_TRACK=internal
           echo "$PRIVATE_KEY" > privatekey.pem
           chmod +x ./bash.sh
-          ./bash.sh ./privatekey.pem ./testJsonNew.json
+          ./bash.sh ./privatekey.pem ./testJsonNew.json internal
         env:
           PRIVATE_KEY: ${{ secrets.AUTH_TOKEN }}
 
