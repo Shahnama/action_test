@@ -125,7 +125,7 @@ post_data_assign_track()
 {
   cat <<EOF
 {
-  "track": "$PLAYSTORE_TRACK",
+  "track": "${{PLAYSTORE_TRACK}}",
   "releases": [
     {
       "versionCodes": [
