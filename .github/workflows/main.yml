@@ -22,28 +22,23 @@ jobs:
     env:
       Greeting: Hi
 
+    outputs:
+      output1: ${{ steps.01.outputs.output }}
 
     steps:
       - uses: actions/checkout@v3.0.0
-
-      - name: "Say Hello Mona it's Monday"
-        run: echo "$Greeting $First_Name. Today is $DAY_OF_WEEK!"
-        env:
-          First_Name: Mona
-
-      - name: "Run a curl request"
-        run: |
-          curl --location --request GET 'https://ybpoq9phol.execute-api.eu-west-2.amazonaws.com/prod?name=${{ secrets.AUTH_ISS }}&company=duk'
-          jq --version
-          echo "done"
-          
+      
       - name: "Publish Bundles"
+      - id: 01
         run: |
           APK_PATH=$(find . -name "*.aab")
           IFS=- read VERSION_NAME PACKAGE_NAME VERSION_CODE rest<<< "$APK_PATH"
+
+      - name: "JWT HEADER"
+        run: | 
           JWT_HEADER=$(echo -n '{"alg":"RS256","typ":"JWT"}' | openssl base64 -e)
 
-      - name: "Make JWT"
+      - name: "JWT CLAIM"
         run: |  
           jwt_claims()
           {
@@ -60,13 +55,13 @@ jobs:
           JWT_CLAIMS=$(echo -n "$(jwt_claims)" | openssl base64 -e)
           JWT_PART_1=$(echo -n "$JWT_HEADER.$JWT_CLAIMS" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
           echo $JWT_PART_1
-          export JWT_PART_1=$JWT_PART_1
-          echo "::set-output name=$JWT_PART_1::$$JWT_PART_1"
+          echo "::set-output name=output::$JWT_PART_1"
 
 
       - name: "Sign JWT"
+
         run:  |
-          echo "JWT_PART_1 -> ${{ steps.vars.outputs.JWT_PART_1 }}"
+          echo "JWT_PART_1 -> ${{greeting_job.outputs.01}} "
           echo "$JWT_PART_1" > message.bin
           openssl dgst -binary -sha256 -sign privatekey.pem  -out jwt_sign.bin  message.bin
           JWT_SIGNING=$(cat jwt_sign.bin | openssl base64 -e )
