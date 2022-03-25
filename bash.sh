@@ -11,6 +11,10 @@ if [ -z "$APK_PATH" ]; then
   exit 1
 fi
 
+
+echo "$Greeting $First_Name. Today is $DAY_OF_WEEK!"
+exit
+
 PLAYSTORE_TRACK=${{ secrets.API_KEY }}
 AUTH_TOKEN=${{ secrets.API_KEY }}
 AUTH_ISS=${{ secrets.API_KEY }}
