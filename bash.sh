@@ -12,13 +12,18 @@ if [ -z "$APK_PATH" ]; then
 fi
 
 
-echo "$Greeting $First_Name. Today is $DAY_OF_WEEK!"
-exit
+
 
 PLAYSTORE_TRACK=${{ secrets.API_KEY }}
 AUTH_TOKEN=${{ secrets.API_KEY }}
 AUTH_ISS=${{ secrets.API_KEY }}
 AUTH_AUD=${{ secrets.API_KEY }}
+
+echo $PLAYSTORE_TRACK
+echo $AUTH_TOKEN
+echo $AUTH_ISS
+echo $AUTH_AUD
+exit
 
 if [ -z "$AUTH_TOKEN" ] || [ -z "$AUTH_ISS" ] || [ -z "$AUTH_AUD" ]; then
   echo "PLAYSTORE_SERVICE_KEY not as expected. Exiting."
