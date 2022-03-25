@@ -43,7 +43,7 @@ jobs:
           IFS=- read VERSION_NAME PACKAGE_NAME VERSION_CODE rest<<< "$APK_PATH"
           JWT_HEADER=$(echo -n '{"alg":"RS256","typ":"JWT"}' | openssl base64 -e)
 
-      - name: "Publish Bundles 2"
+      - name: "Make JWT"
         run: |  
           jwt_claims()
           {
@@ -67,12 +67,8 @@ jobs:
           echo "$JWT_PART_1" > message.bin
           openssl dgst -binary -sha256 -sign privatekey.pem  -out jwt_sign.bin  message.bin
           JWT_SIGNING=$(cat jwt_sign.bin | openssl base64 -e )
-
-
-      - name: "JWT"
-        run: |  
           JWT_PART_2=$(echo -n "$JWT_SIGNING" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
-          echo $JWT_PART_2
+          echo $JWT_PART_1.$JWT_PART_2
 
       - name: "Getting access token..."
         run: |  
