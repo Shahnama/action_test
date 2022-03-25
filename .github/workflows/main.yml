@@ -64,6 +64,7 @@ jobs:
 
       - name: "Sign JWT"
         run:  |
+          echo "JWT_PART_1 -> $JWT_PART_1"
           echo "$JWT_PART_1" > message.bin
           openssl dgst -binary -sha256 -sign privatekey.pem  -out jwt_sign.bin  message.bin
           JWT_SIGNING=$(cat jwt_sign.bin | openssl base64 -e )
