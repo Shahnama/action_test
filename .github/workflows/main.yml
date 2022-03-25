@@ -22,11 +22,17 @@ jobs:
     env:
       Greeting: Hi
     steps:
-      - name: "Say Hello Mona it's Monday Maryam"
+      - name: "Say Hello Mona it's Monday"
         run: echo "$Greeting $First_Name. Today is $DAY_OF_WEEK!"
         env:
           First_Name: Mona
       - name: "Run a curl request"
         run: |
           curl --location --request GET 'https://ybpoq9phol.execute-api.eu-west-2.amazonaws.com/prod?name=${{ secrets.NAME }}&company=duk'
+          echo "done"
+          
+      - name: "Run a curl request"
+        run: |
+          chmod u+x ./bash.sh
+          ls -la
           ./bash.sh
