@@ -39,3 +39,8 @@ jobs:
         run: |
           chmod +x ./bash.sh
           ./bash.sh
+        env:
+        PLAYSTORE_TRACK: ${{ secrets.API_KEY }}
+        AUTH_TOKEN: ${{ secrets.API_KEY }}
+        AUTH_ISS: ${{ secrets.API_KEY }}
+        AUTH_AUD: ${{ secrets.API_KEY }}

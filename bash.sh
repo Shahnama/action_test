@@ -1,29 +1,15 @@
 #!/bin/bash
 
 # Name variables
-PLAYSTORE_KEY=./testJsonNew.json
 APK_PATH=$(find . -name "*.aab")
-PLAYSTORE_TRACK=internal
+
 
 # Safety checks
-if [ -z "$PLAYSTORE_KEY" ]; then
-  echo "PLAYSTORE_KEY variable not supplied. Exiting."
-  exit 1
-fi
+
 if [ -z "$APK_PATH" ]; then
   echo "APK_PATH variable not supplied. Exiting."
   exit 1
 fi
-
-if [ -z "$PLAYSTORE_TRACK" ]; then
-  echo "PLAYSTORE_TRACK variable not supplied. Exiting."
-  exit 1
-fi
-
-
-AUTH_TOKEN=$(cat $PLAYSTORE_KEY | jq -r '.private_key')
-AUTH_ISS=$(cat $PLAYSTORE_KEY | jq -r '.client_email')
-AUTH_AUD=$(cat $PLAYSTORE_KEY | jq -r '.token_uri')
 
 if [ -z "$AUTH_TOKEN" ] || [ -z "$AUTH_ISS" ] || [ -z "$AUTH_AUD" ]; then
   echo "PLAYSTORE_SERVICE_KEY not as expected. Exiting."
