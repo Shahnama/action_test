@@ -62,6 +62,7 @@ jobs:
 
       - name: "Getting access token..."
         run: |  
+          echo "JWT_PARTS -> $JWT_PARTS"
           HTTP_RESPONSE_TOKEN=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" \
             --header "Content-type: application/x-www-form-urlencoded" \
             --request POST \
