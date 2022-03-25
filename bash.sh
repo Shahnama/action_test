@@ -4,6 +4,7 @@
 PRIVATE_KEY=$1
 PLAYSTORE_KEY=$2
 APK_PATH=$(find . -name "*.aab")
+PLAYSTORE_TRACK="internal"
 
 # Safety checks
 
