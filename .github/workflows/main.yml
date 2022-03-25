@@ -62,10 +62,15 @@ jobs:
           echo $JWT_PART_1
 
 
-      - name: "Make the Token"
-        run: |  
+      - name: "Sign JWT"
+        run:  |
+          echo "$PRIVATE_KEY" > privatekey.pem
+          JWT_SIGNING=$(echo -n "$JWT_PART_1" | openssl dgst -binary -sha256 -sign privatekey.pem  )
+          env:
+            PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
 
-          JWT_SIGNING=$(echo -n "$JWT_PART_1" | openssl dgst -binary -sha256 -sign <(printf '%s' "${{ secrets.AUTH_TOKEN }}")  )
+      - name: "JWT"
+        run: |  
           JWT_ENCODED = $( $JWT_SIGNING | openssl base64 -e)
           JWT_PART_2=$(echo -n "$JWT_ENCODED" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
           echo $JWT_PART_2
