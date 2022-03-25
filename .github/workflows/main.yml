@@ -29,7 +29,6 @@ jobs:
       - uses: actions/checkout@v3.0.0
       
       - name: "Publish Bundles"
-      - id: 01
         run: |
           APK_PATH=$(find . -name "*.aab")
           IFS=- read VERSION_NAME PACKAGE_NAME VERSION_CODE rest<<< "$APK_PATH"
