@@ -66,14 +66,16 @@ jobs:
         run:  |
           echo "$JWT_PART_1" > message.bin
           openssl dgst -binary -sha256 -sign privatekey.pem  -out jwt_sign.bin  message.bin
-
+          JWT_SIGNING=$(cat jwt_sign.bin | openssl base64 -e )
+          env:
+            PRIVATE_KEY: ${{ secrets.AUTH_TOKEN }}
 
       - name: "JWT"
         run: |  
           JWT_PART_2=$(echo -n "$JWT_SIGNING" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
           echo $JWT_PART_2
 
-      - name: "Take the Token"
+      - name: "Getting access token..."
         run: |  
           HTTP_RESPONSE_TOKEN=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" \
             --header "Content-type: application/x-www-form-urlencoded" \
@@ -90,6 +92,9 @@ jobs:
           fi
           ACCESS_TOKEN=$(echo $HTTP_BODY_TOKEN | jq -r '.access_token')
 
+
+      - name: "Creating new edit..."
+        run: |  
           # Create new edit
           echo "Creating new edit..."
 
@@ -121,6 +126,10 @@ jobs:
           fi
 
           EDIT_ID=$(echo $HTTP_BODY_CREATE_EDIT | jq -r '.id')
+
+
+        - name: "Uploading apk..."
+          run: |  
           # Upload apk
           echo "Uploading apk..."
 
@@ -140,6 +149,9 @@ jobs:
             exit 1
           fi
 
+
+        - name: "Assigning edit to track..."
+          run: |  
           # Assign edit to track
           echo "Assigning edit to track..."
 
@@ -175,6 +187,8 @@ jobs:
             exit 1
           fi
 
+        - name: "Committing edit..."
+          run: |  
           # Commit edit
           echo "Committing edit..."
 
