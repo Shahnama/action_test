@@ -25,10 +25,10 @@ fi
 # echo $AUTH_AUD
 # exit
 
-if [ -z "$AUTH_TOKEN" ] || [ -z "$AUTH_ISS" ] || [ -z "$AUTH_AUD" ]; then
-  echo "PLAYSTORE_SERVICE_KEY not as expected. Exiting."
-  exit 1
-fi
+# if [ -z "$AUTH_TOKEN" ] || [ -z "$AUTH_ISS" ] || [ -z "$AUTH_AUD" ]; then
+#   echo "PLAYSTORE_SERVICE_KEY not as expected. Exiting."
+#   exit 1
+# fi
 
 IFS=- read VERSION_NAME PACKAGE_NAME VERSION_CODE rest<<< "$APK_PATH"
 
