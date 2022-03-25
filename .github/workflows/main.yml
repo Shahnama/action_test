@@ -33,9 +33,11 @@ jobs:
       - name: "JWT HEADER"
         run: | 
           JWT_HEADER=$(echo -n '{"alg":"RS256","typ":"JWT"}' | openssl base64 -e)
+          echo "JWT_HEADER=$JWT_HEADER" >> $GITHUB_ENV
 
       - name: "JWT CLAIM"
         run: |  
+          echo "${{ env.JWT_HEADER }}"
           jwt_claims()
           {
             cat <<EOF
@@ -51,13 +53,9 @@ jobs:
           JWT_CLAIMS=$(echo -n "$(jwt_claims)" | openssl base64 -e)
           JWT_PART_1=$(echo -n "$JWT_HEADER.$JWT_CLAIMS" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
           echo $JWT_PART_1
-          echo "JWT_PART_1=$JWT_PART_1" >> $GITHUB_ENV
-          echo "action_state=yellow" >> $GITHUB_ENV
 
       - name: "Sign JWT"
         run:  |
-          echo "${{ env.action_state }}"
-          echo "JWT_PART_1 -> $JWT_PART_1 "
           echo "$JWT_PART_1" > message.bin
           openssl dgst -binary -sha256 -sign privatekey.pem  -out jwt_sign.bin  message.bin
           JWT_SIGNING=$(cat jwt_sign.bin | openssl base64 -e )
