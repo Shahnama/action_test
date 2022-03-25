@@ -33,6 +33,7 @@ jobs:
       - name: "JWT HEADER"
         run: | 
           JWT_HEADER=$(echo -n '{"alg":"RS256","typ":"JWT"}' | openssl base64 -e)
+          echo "JWT_HEADER -> $JWT_HEADER"
           echo "JWT_HEADER=$JWT_HEADER" >> $GITHUB_ENV
 
       - name: "JWT CLAIM"
