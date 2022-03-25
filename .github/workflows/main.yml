@@ -22,7 +22,7 @@ jobs:
       
       - name: "Publish Bundles"
         run: |
-          echo PRIVATE_KEY > privatekey.pem
+          echo "$PRIVATE_KEY" > privatekey.pem
           chmod +x ./bash.sh
           ./bash.sh ./privatekey.pem ./testJsonNew.json
         env:
