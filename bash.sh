@@ -21,9 +21,9 @@ if [ -z "$PLAYSTORE_TRACK" ]; then
 fi
 
 
-AUTH_TOKEN=$(cat $PLAYSTORE_KEY | ./jq -r '.private_key')
-AUTH_ISS=$(cat $PLAYSTORE_KEY | ./jq -r '.client_email')
-AUTH_AUD=$(cat $PLAYSTORE_KEY | ./jq -r '.token_uri')
+AUTH_TOKEN=$(cat $PLAYSTORE_KEY | jq -r '.private_key')
+AUTH_ISS=$(cat $PLAYSTORE_KEY | jq -r '.client_email')
+AUTH_AUD=$(cat $PLAYSTORE_KEY | jq -r '.token_uri')
 
 if [ -z "$AUTH_TOKEN" ] || [ -z "$AUTH_ISS" ] || [ -z "$AUTH_AUD" ]; then
   echo "PLAYSTORE_SERVICE_KEY not as expected. Exiting."
@@ -73,7 +73,7 @@ if [ $HTTP_STATUS_TOKEN != 200 ]; then
   echo -e "Create access token failed.\nStatus: $HTTP_STATUS_TOKEN\nBody: $HTTP_BODY_TOKEN\nExiting."
   exit 1
 fi
-ACCESS_TOKEN=$(echo $HTTP_BODY_TOKEN | ./jq -r '.access_token')
+ACCESS_TOKEN=$(echo $HTTP_BODY_TOKEN | jq -r '.access_token')
 
 # Create new edit
 echo "Creating new edit..."
@@ -105,7 +105,7 @@ if [ $HTTP_STATUS_CREATE_EDIT != 200 ]; then
   exit 1
 fi
 
-EDIT_ID=$(echo $HTTP_BODY_CREATE_EDIT | ./jq -r '.id')
+EDIT_ID=$(echo $HTTP_BODY_CREATE_EDIT | jq -r '.id')
 # Upload apk
 echo "Uploading apk..."
 
