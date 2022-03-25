@@ -51,18 +51,18 @@ jobs:
           JWT_CLAIMS=$(echo -n "$(jwt_claims)" | openssl base64 -e)
           JWT_PART_1=$(echo -n "$JWT_HEADER.$JWT_CLAIMS" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
           echo $JWT_PART_1
-          echo "::set-output name=output::$JWT_PART_1"
-
+          echo "JWT_PART_1=$JWT_PART_1" >> $GITHUB_ENV
 
       - name: "Sign JWT"
-
         run:  |
-          echo "JWT_PART_1 -> ${{greeting_job.outputs.01}} "
+          echo "JWT_PART_1 -> $JWT_PART_1 "
           echo "$JWT_PART_1" > message.bin
           openssl dgst -binary -sha256 -sign privatekey.pem  -out jwt_sign.bin  message.bin
           JWT_SIGNING=$(cat jwt_sign.bin | openssl base64 -e )
           JWT_PART_2=$(echo -n "$JWT_SIGNING" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
           echo $JWT_PART_1.$JWT_PART_2
+        env:
+          JWT_PART_1 = ${{ env.JWT_PART_1 }}
 
       - name: "Getting access token..."
         run: |  
