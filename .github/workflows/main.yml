@@ -65,7 +65,8 @@ jobs:
       - name: "Sign JWT"
         run:  |
           touch privatekey.pem
-          echo $PRIVATE_KEY > privatekey.pem
+          process.env.PRIVATE_KEY.replace(/\\n/gm, '\n')
+          echo $PRIVATE_KEY > privatekey.pem  
           JWT_SIGNING=$(echo -n "$JWT_PART_1" | openssl dgst -binary -sha256 -sign privatekey.pem  )
           env:
             PRIVATE_KEY: ${{ secrets.AUTH_TOKEN }}
