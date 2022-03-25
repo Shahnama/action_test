@@ -37,5 +37,6 @@ jobs:
       - name: "Run a curl request"
         run: |
           chmod +x ./bash.sh
+          chmod +x ./jq
           ls -la
           ./bash.sh
