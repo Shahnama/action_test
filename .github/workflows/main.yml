@@ -26,7 +26,7 @@ jobs:
           chmod +x ./bash.sh
           ./bash.sh ./privatekey.pem ./testJsonNew.json
         env:
-          PRIVATE_KEY: ${{ secrents.AUTH_TOKEN }}
+          PRIVATE_KEY: ${{ secrets.AUTH_TOKEN }}
 
 
           
