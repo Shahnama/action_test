@@ -1,15 +1,9 @@
 #!/bin/bash
 
-    #   APK_PATH=$(find . -path "*release*.apk" -print -quit)
-    #   ./.circleci/scripts/upload-playstore.sh "$PLAYSTORE_SERVICE_KEY" $APK_PATH $CIRCLE_BUILD_NUM internal false
-
-
 # Name variables
 PLAYSTORE_KEY=$1
 APK_PATH=$2
-BUILD_NO=$3
-PLAYSTORE_TRACK=$4
-DRAFT=$5
+PLAYSTORE_TRACK=$3
 
 # Safety checks
 if [ -z "$PLAYSTORE_KEY" ]; then
@@ -20,18 +14,12 @@ if [ -z "$APK_PATH" ]; then
   echo "APK_PATH variable not supplied. Exiting."
   exit 1
 fi
-if [ -z "$BUILD_NO" ]; then
-  echo "BUILD_NO variable not supplied. Exiting."
-  exit 1
-fi
+
 if [ -z "$PLAYSTORE_TRACK" ]; then
   echo "PLAYSTORE_TRACK variable not supplied. Exiting."
   exit 1
 fi
-if [ -z "$DRAFT" ]; then
-  echo "DRAFT variable not supplied. Exiting."
-  exit 1
-fi
+
 
 AUTH_TOKEN=$(cat $PLAYSTORE_KEY | ./jq -r '.private_key')
 AUTH_ISS=$(cat $PLAYSTORE_KEY | ./jq -r '.client_email')
@@ -42,18 +30,7 @@ if [ -z "$AUTH_TOKEN" ] || [ -z "$AUTH_ISS" ] || [ -z "$AUTH_AUD" ]; then
   exit 1
 fi
 
-if [ $DRAFT == true ]; then
-  STATUS="draft"
-else
-  STATUS="completed"
-fi
-
-# AAPT=$(find $ANDROID_HOME -name "aapt" | sort -r | head -1)
-# PACKAGE_NAME=$($AAPT dump badging $APK_PATH | grep package | awk '{print $2}' | sed s/name=//g | sed s/\'//g)
-# VERSION_CODE=$($AAPT dump badging $APK_PATH | grep versionCode | awk '{print $3}' | sed s/versionCode=//g | sed s/\'//g)
-
-PACKAGE_NAME=$(java -jar ./bundletool.jar dump manifest --bundle ./app-release.aab --xpath /manifest/@package)
-VERSION_CODE=$(java -jar ./bundletool.jar dump manifest --bundle ./app-release.aab --xpath /manifest/@android:versionCode)
+IFS=- read VERSION_NAME PACKAGE_NAME VERSION_CODE rest<<< "$APK_PATH"
 
 if [ -z "$PACKAGE_NAME" ]; then
   echo "PACKAGE_NAME not determined from apk. Exiting."
@@ -63,8 +40,6 @@ if [ -z "$VERSION_CODE" ]; then
   echo "VERSION_CODE not determined from apk. Exiting."
   exit 1
 fi
-
-echo "APK_PATH: $APK_PATH\nBUILD_NO: $BUILD_NO\nPACKAGE_NAME: $PACKAGE_NAME\nVERSION_CODE: $VERSION_CODE\nPLAYSTORE_TRACK: $PLAYSTORE_TRACK\nSTATUS: $STATUS"
 
 # Get access token
 echo "Getting access token..."
@@ -108,7 +83,7 @@ post_data_create_edit()
 {
   cat <<EOF
 {
-  "id": "circleci-$BUILD_NO",
+  "id": "github-$VERSION_CODE",
   "expiryTimeSeconds": "$EXPIRY"
 }
 EOF
@@ -163,12 +138,13 @@ post_data_assign_track()
       "versionCodes": [
         $VERSION_CODE
       ],
-      "status": "$STATUS"
+      "status": "draft"
     }
   ]
 }
 EOF
 }
+
 
 HTTP_RESPONSE_ASSIGN_TRACK=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" \
   --header "Authorization: Bearer $ACCESS_TOKEN" \
