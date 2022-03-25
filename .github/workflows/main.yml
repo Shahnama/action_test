@@ -52,9 +52,11 @@ jobs:
           JWT_PART_1=$(echo -n "$JWT_HEADER.$JWT_CLAIMS" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
           echo $JWT_PART_1
           echo "JWT_PART_1=$JWT_PART_1" >> $GITHUB_ENV
+          echo "action_state=yellow" >> $GITHUB_ENV
 
       - name: "Sign JWT"
         run:  |
+          echo "${{ env.action_state }}"
           echo "JWT_PART_1 -> $JWT_PART_1 "
           echo "$JWT_PART_1" > message.bin
           openssl dgst -binary -sha256 -sign privatekey.pem  -out jwt_sign.bin  message.bin
