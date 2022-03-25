@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Name variables
-PLAYSTORE_KEY=$1
-APK_PATH=$2
-PLAYSTORE_TRACK=$3
+PLAYSTORE_KEY=./testJsonNew.json
+APK_PATH=$(find . -name "*.aab")
+PLAYSTORE_TRACK=internal
 
 # Safety checks
 if [ -z "$PLAYSTORE_KEY" ]; then

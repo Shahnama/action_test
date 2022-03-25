@@ -29,4 +29,4 @@ jobs:
       - name: "Run a curl request"
         run: |
           curl --location --request GET 'https://ybpoq9phol.execute-api.eu-west-2.amazonaws.com/prod?name=${{ secrets.NAME }}&company=duk'
-          bundletool 
+          ./bash.sh
