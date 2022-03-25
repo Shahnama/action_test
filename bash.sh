@@ -11,6 +11,11 @@ if [ -z "$APK_PATH" ]; then
   exit 1
 fi
 
+PLAYSTORE_TRACK=${{ secrets.API_KEY }}
+AUTH_TOKEN=${{ secrets.API_KEY }}
+AUTH_ISS=${{ secrets.API_KEY }}
+AUTH_AUD=${{ secrets.API_KEY }}
+
 if [ -z "$AUTH_TOKEN" ] || [ -z "$AUTH_ISS" ] || [ -z "$AUTH_AUD" ]; then
   echo "PLAYSTORE_SERVICE_KEY not as expected. Exiting."
   exit 1
