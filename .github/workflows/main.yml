@@ -29,11 +29,11 @@ jobs:
         run: | 
           JWT_HEADER=$(echo -n '{"alg":"RS256","typ":"JWT"}' | openssl base64 -e)
           echo "JWT_HEADER -> $JWT_HEADER"
-          echo "JWT_HEADER=$JWT_HEADER" >> $GITHUB_ENV
+          echo "HEADER=JWT_HEADER" >> $GITHUB_ENV
 
       - name: "JWT CLAIM"
         run: |  
-          echo "$JWT_HEADER"
+          echo "HEADER -> $HEADER"
           jwt_claims()
           {
             cat <<EOF
@@ -50,7 +50,7 @@ jobs:
           JWT_PART_1=$(echo -n "$JWT_HEADER.$JWT_CLAIMS" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
           echo $JWT_PART_1
         env:
-          JWT_HEADER = "${{ env.JWT_HEADER }}"
+          HEADER = "${{ env.HEADER }}"
 
       - name: "Sign JWT"
         run:  |
