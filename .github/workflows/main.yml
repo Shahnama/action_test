@@ -36,9 +36,9 @@ jobs:
           {
             cat <<EOF
           {
-            "iss": ${{ secrets.AUTH_ISS }},
+            "iss": $ISS,
             "scope": "https://www.googleapis.com/auth/androidpublisher",
-            "aud": ${{ secrets.AUTH_AUD }},
+            "aud": $AUD,
             "iat": $(date +%s),
             "exp": $(($(date +%s)+300))
           }
@@ -49,6 +49,8 @@ jobs:
           echo "HEADER=$JWT_PART_1" >> $GITHUB_ENV
         env:
           JWT_HEADER: "${{ env.HEADER }}"
+          ISS: ${{ secrets.AUTH_ISS }},
+          AUD: ${{ secrets.AUTH_AUD }},
 
       - name: "Sign JWT"
         run:  |
