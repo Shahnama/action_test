@@ -14,7 +14,10 @@ fi
 
 
 
-
+# PLAYSTORE_TRACK=${{ secrets.API_KEY }}
+# AUTH_TOKEN=${{ secrets.API_KEY }}
+# AUTH_ISS=${{ secrets.API_KEY }}
+# AUTH_AUD=${{ secrets.API_KEY }}
 
 # echo $PLAYSTORE_TRACK
 # echo $AUTH_TOKEN
@@ -22,10 +25,10 @@ fi
 # echo $AUTH_AUD
 # exit
 
-# if [ -z "$AUTH_TOKEN" ] || [ -z "$AUTH_ISS" ] || [ -z "$AUTH_AUD" ]; then
-#   echo "PLAYSTORE_SERVICE_KEY not as expected. Exiting."
-#   exit 1
-# fi
+if [ -z "$AUTH_TOKEN" ] || [ -z "$AUTH_ISS" ] || [ -z "$AUTH_AUD" ]; then
+  echo "PLAYSTORE_SERVICE_KEY not as expected. Exiting."
+  exit 1
+fi
 
 IFS=- read VERSION_NAME PACKAGE_NAME VERSION_CODE rest<<< "$APK_PATH"
 
@@ -46,9 +49,9 @@ jwt_claims()
 {
   cat <<EOF
 {
-  "iss": ${{ secrets.API_KEY }},
+  "iss": "$AUTH_ISS",
   "scope": "https://www.googleapis.com/auth/androidpublisher",
-  "aud": ${{ secrets.API_KEY }},
+  "aud": "$AUTH_AUD",
   "iat": $(date +%s),
   "exp": $(($(date +%s)+300))
 }
@@ -58,9 +61,6 @@ JWT_CLAIMS=$(echo -n "$(jwt_claims)" | openssl base64 -e)
 JWT_PART_1=$(echo -n "$JWT_HEADER.$JWT_CLAIMS" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
 JWT_SIGNING=$(echo -n "$JWT_PART_1" | openssl dgst -binary -sha256 -sign <(printf '%s\n' "$AUTH_TOKEN") | openssl base64 -e)
 JWT_PART_2=$(echo -n "$JWT_SIGNING" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
-
-
-echo $JWT_CLAIMS
 
 HTTP_RESPONSE_TOKEN=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" \
   --header "Content-type: application/x-www-form-urlencoded" \
