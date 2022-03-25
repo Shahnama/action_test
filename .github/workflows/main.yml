@@ -68,7 +68,10 @@ jobs:
           JWT_SIGNING=$(echo -n "$JWT_PART_1" | openssl dgst -binary -sha256 -sign ${{ secrets.AUTH_TOKEN }} )
           JWT_ENCODED = $( $JWT_SIGNING | openssl base64 -e)
           JWT_PART_2=$(echo -n "$JWT_ENCODED" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
+          echo $JWT_PART_2
 
+      - name: "Take the Token"
+        run: |  
           HTTP_RESPONSE_TOKEN=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" \
             --header "Content-type: application/x-www-form-urlencoded" \
             --request POST \
