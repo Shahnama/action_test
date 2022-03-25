@@ -128,8 +128,8 @@ jobs:
           EDIT_ID=$(echo $HTTP_BODY_CREATE_EDIT | jq -r '.id')
 
 
-        - name: "Uploading apk..."
-          run: |  
+      - name: "Uploading apk..."
+        run: |  
           # Upload apk
           echo "Uploading apk..."
 
@@ -150,8 +150,8 @@ jobs:
           fi
 
 
-        - name: "Assigning edit to track..."
-          run: |  
+      - name: "Assigning edit to track..."
+        run: |  
           # Assign edit to track
           echo "Assigning edit to track..."
 
@@ -187,8 +187,8 @@ jobs:
             exit 1
           fi
 
-        - name: "Committing edit..."
-          run: |  
+      - name: "Committing edit..."
+        run: |  
           # Commit edit
           echo "Committing edit..."
 
