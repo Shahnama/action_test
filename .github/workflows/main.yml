@@ -28,12 +28,10 @@ jobs:
       - name: "JWT HEADER"
         run: | 
           JWT_HEADER=$(echo -n '{"alg":"RS256","typ":"JWT"}' | openssl base64 -e)
-          echo "JWT_HEADER -> $JWT_HEADER"
-          echo "HEADER=JWT_HEADER" >> $GITHUB_ENV
+          echo "HEADER=$JWT_HEADER" >> $GITHUB_ENV
 
       - name: "JWT CLAIM"
         run: |  
-          echo "HEADER -> $HEADER"
           jwt_claims()
           {
             cat <<EOF
@@ -48,9 +46,9 @@ jobs:
           }
           JWT_CLAIMS=$(echo -n "$(jwt_claims)" | openssl base64 -e)
           JWT_PART_1=$(echo -n "$JWT_HEADER.$JWT_CLAIMS" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
-          echo $JWT_PART_1
+          echo "HEADER=$JWT_PART_1" >> $GITHUB_ENV
         env:
-          HEADER = "${{ env.HEADER }}"
+          JWT_HEADER: "${{ env.HEADER }}"
 
       - name: "Sign JWT"
         run:  |
@@ -58,16 +56,16 @@ jobs:
           openssl dgst -binary -sha256 -sign privatekey.pem  -out jwt_sign.bin  message.bin
           JWT_SIGNING=$(cat jwt_sign.bin | openssl base64 -e )
           JWT_PART_2=$(echo -n "$JWT_SIGNING" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
-          echo $JWT_PART_1.$JWT_PART_2
+          echo "HEADER=$JWT_PART_1.$JWT_PART_2" >> $GITHUB_ENV
         env:
-          JWT_PART_1 = ${{ env.JWT_PART_1 }}
+          JWT_PART_1: "${{ env.HEADER }}"
 
       - name: "Getting access token..."
         run: |  
           HTTP_RESPONSE_TOKEN=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" \
             --header "Content-type: application/x-www-form-urlencoded" \
             --request POST \
-            --data "grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=$JWT_PART_1.$JWT_PART_2" \
+            --data "grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=$JWT_PARTS" \
             ${{ secrets.AUTH_AUD }})
           HTTP_BODY_TOKEN=$(echo $HTTP_RESPONSE_TOKEN | sed -e 's/HTTPSTATUS\:.*//g')
           HTTP_STATUS_TOKEN=$(echo $HTTP_RESPONSE_TOKEN | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
@@ -78,7 +76,8 @@ jobs:
             exit 1
           fi
           ACCESS_TOKEN=$(echo $HTTP_BODY_TOKEN | jq -r '.access_token')
-
+        env:
+          JWT_PARTS: "${{ env.HEADER }}"
 
       - name: "Creating new edit..."
         run: |  
