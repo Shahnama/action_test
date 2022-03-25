@@ -21,10 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       Greeting: Hi
-      PLAYSTORE_TRACK: ${{ secrets.PLAYSTORE_TRACK }}
-      AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
-      AUTH_ISS: ${{ secrets.AUTH_ISS }}
-      AUTH_AUD: ${{ secrets.AUTH_AUD }}
+
 
     steps:
       - uses: actions/checkout@v3.0.0

@@ -12,6 +12,10 @@ if [ -z "$APK_PATH" ]; then
 fi
 
 
+      # PLAYSTORE_TRACK: ${{ secrets.PLAYSTORE_TRACK }}
+      # AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+      # AUTH_ISS: ${{ secrets.AUTH_ISS }}
+      # AUTH_AUD: ${{ secrets.AUTH_AUD }}
 
 
 # PLAYSTORE_TRACK=${{ secrets.API_KEY }}
@@ -49,9 +53,9 @@ jwt_claims()
 {
   cat <<EOF
 {
-  "iss": "$AUTH_ISS",
+  "iss": ${{ secrets.AUTH_ISS }},
   "scope": "https://www.googleapis.com/auth/androidpublisher",
-  "aud": "$AUTH_AUD",
+  "aud": ${{ secrets.AUTH_AUD }},
   "iat": $(date +%s),
   "exp": $(($(date +%s)+300))
 }
@@ -59,19 +63,17 @@ EOF
 }
 JWT_CLAIMS=$(echo -n "$(jwt_claims)" | openssl base64 -e)
 JWT_PART_1=$(echo -n "$JWT_HEADER.$JWT_CLAIMS" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
-JWT_SIGNING=$(echo -n "$JWT_PART_1" | openssl dgst -binary -sha256 -sign <(printf '%s\n' "$AUTH_TOKEN") | openssl base64 -e)
+JWT_SIGNING=$(echo -n "$JWT_PART_1" | openssl dgst -binary -sha256 -sign <(printf '%s\n' ${{ secrets.AUTH_TOKEN }} ) | openssl base64 -e)
 JWT_PART_2=$(echo -n "$JWT_SIGNING" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
 
 HTTP_RESPONSE_TOKEN=$(curl --silent --write-out "HTTPSTATUS:%{http_code}" \
   --header "Content-type: application/x-www-form-urlencoded" \
   --request POST \
   --data "grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=$JWT_PART_1.$JWT_PART_2" \
-  "$AUTH_AUD")
+  ${{ secrets.AUTH_AUD }})
 HTTP_BODY_TOKEN=$(echo $HTTP_RESPONSE_TOKEN | sed -e 's/HTTPSTATUS\:.*//g')
 HTTP_STATUS_TOKEN=$(echo $HTTP_RESPONSE_TOKEN | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
 
-
-echo $JWT_PART_1.$JWT_PART_2
 
 if [ $HTTP_STATUS_TOKEN != 200 ]; then
   echo -e "Create access token failed.\nStatus: $HTTP_STATUS_TOKEN\nBody: $HTTP_BODY_TOKEN\nExiting."
