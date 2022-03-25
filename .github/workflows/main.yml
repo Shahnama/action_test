@@ -64,17 +64,13 @@ jobs:
 
       - name: "Sign JWT"
         run:  |
-          touch privatekey.pem
-          process.env.PRIVATE_KEY.replace(/\\n/gm, '\n')
-          echo $PRIVATE_KEY > privatekey.pem  
-          JWT_SIGNING=$(echo -n "$JWT_PART_1" | openssl dgst -binary -sha256 -sign privatekey.pem  )
+          JWT_SIGNING=$(echo -n "$JWT_PART_1" | openssl dgst -binary -sha256 -sign privatekey.pem | openssl base64 -e )
           env:
             PRIVATE_KEY: ${{ secrets.AUTH_TOKEN }}
 
       - name: "JWT"
         run: |  
-          JWT_ENCODED = $( $JWT_SIGNING | openssl base64 -e)
-          JWT_PART_2=$(echo -n "$JWT_ENCODED" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
+          JWT_PART_2=$(echo -n "$JWT_SIGNING" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
           echo $JWT_PART_2
 
       - name: "Take the Token"
