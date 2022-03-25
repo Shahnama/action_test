@@ -60,6 +60,8 @@ jobs:
           JWT_CLAIMS=$(echo -n "$(jwt_claims)" | openssl base64 -e)
           JWT_PART_1=$(echo -n "$JWT_HEADER.$JWT_CLAIMS" | tr -d '\n' | tr -d '=' | tr '/+' '_-')
           echo $JWT_PART_1
+          export JWT_PART_1=$JWT_PART_1
+          echo "::set-env name=$JWT_PART_1::$$JWT_PART_1"
 
 
       - name: "Sign JWT"
