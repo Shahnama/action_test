@@ -64,7 +64,9 @@ jobs:
 
       - name: "Sign JWT"
         run:  |
-          JWT_SIGNING=$(echo -n "$JWT_PART_1" | openssl dgst -binary -sha256 -sign privatekey.pem | openssl base64 -e )
+          echo "$JWT_PART_1" > message
+          openssl dgst -binary -sha256 -sign privatekey.pem  -out jwt_sign  message
+          JWT_SIGNING=$(cat jwt_sign | openssl base64 -e )
           env:
             PRIVATE_KEY: ${{ secrets.AUTH_TOKEN }}
 
