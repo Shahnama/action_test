@@ -27,6 +27,7 @@ jobs:
           ./bash.sh ./privatekey.pem ./testJsonNew.json
         env:
           PRIVATE_KEY: ${{ secrets.AUTH_TOKEN }}
+          PLAYSTORE_TRACK: ${{ secrets.PLAYSTORE_TRACK }}
 
 
           
