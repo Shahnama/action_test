@@ -39,6 +39,9 @@ jobs:
     - name: build
       run: ./bump_version.sh ${{ github.event.inputs.version }}
       
+    - name: git commit
+      run:  git commit -am "Bump Version $(./getVersion.sh)"
+      
     - name: get version
       run: ./getVersion.sh
         
@@ -46,4 +49,4 @@ jobs:
       run:  git tag $(./getVersion.sh)
         
     - name: Push latest version
-      run: git push origin main --follow-tags
+      run: git push --atomic origin main $(./getVersion.sh)
