@@ -46,7 +46,7 @@ jobs:
       run: ./getVersion.sh
         
     - name: git tag
-      run:  git tag v$(./getVersion.sh) -m "Tag message"
+      run:  git tag "v$(./getVersion.sh ANDROID_VERSION_NAME)" -m "Tag message"
         
     - name: Push latest version
-      run: git push --atomic origin main $(./getVersion.sh)
+      run: git push --atomic origin main "v$(./getVersion.sh ANDROID_VERSION_NAME)"
