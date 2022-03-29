@@ -1,7 +1,8 @@
 on:
-  push:
-    tags:
-      - 'v*'
+  workflow_run:
+    workflows: ["Bump Version"]
+    types:
+      - completed
 
 name: Create Release
 
