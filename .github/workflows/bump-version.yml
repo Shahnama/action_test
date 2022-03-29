@@ -46,7 +46,7 @@ jobs:
       run: ./getVersion.sh
         
     - name: git tag
-      run:  git tag $(./getVersion.sh)
+      run:  git tag $(./getVersion.sh) -m "Tag message"
         
     - name: Push latest version
       run: git push --atomic origin main $(./getVersion.sh)
