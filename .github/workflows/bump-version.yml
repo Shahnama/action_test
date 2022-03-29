@@ -40,7 +40,11 @@ jobs:
       run: ./bump_version.sh ${{ github.event.inputs.version }}
       
     - name: git tag
-      run: git tag $(./getVersion.sh)
-
+      run: |
+        ./getVersion.sh
+        git tag 
+        git tag $(./getVersion.sh)
+        git tag 
+        
     - name: Push latest version
       run: git push origin main --follow-tags
