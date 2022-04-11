@@ -17,7 +17,8 @@ generate_post_data()
   "name": "$version",
   "body": "$text",
   "draft": false,
-  "prerelease": false
+  "prerelease": false,
+  "generate_release_notes": true
 }
 EOF
 }
