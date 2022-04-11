@@ -37,7 +37,7 @@ jobs:
       run: ./bump_version.sh ${{ github.event.inputs.version }}
       
     - name: build
-      run: ./bump_version.sh ${{ github.event.inputs.version }}
+      run: echo "Build APKs/Bundles"
       
     - name: git commit
       run:  git commit -am "Bump Version $(./getVersion.sh)"
