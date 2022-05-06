@@ -1,4 +1,4 @@
-name: Bump Version
+name: Test Action
 on:
   workflow_dispatch:
     # Inputs the workflow accepts.
