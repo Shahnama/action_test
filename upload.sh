@@ -12,4 +12,4 @@ for file in $foundFiles ; do
     echo "file:  ${file}"
     echo "${file##*/}"
 
-echo
+done
