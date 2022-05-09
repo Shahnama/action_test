@@ -13,6 +13,10 @@ on:
         - patch
         - minor
         - major
+      test_app:
+        description: 'TestApp only '
+        required: true
+        type: boolean
 
 
 jobs:
@@ -32,3 +36,7 @@ jobs:
       
     - name: Setup Git
       run: ./upload.sh
+      
+    - name: test
+      run: ./upload.sh  ${{ github.event.inputs.version }}
+     
