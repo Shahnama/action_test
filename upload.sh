@@ -1,15 +1,17 @@
 #!/bin/bash
 
-id=$1
-token=$2
+echo $1
 
-fileType="apk"
-searchFolder="./packages/**/*.$fileType"
-find . -type f -path "$searchFolder"
-foundFiles=$(find . -type f -path "$searchFolder")
+# id=$1
+# token=$2
 
-for file in $foundFiles ; do
-    echo "file:  ${file}"
-    echo "${file##*/}"
+# fileType="apk"
+# searchFolder="./packages/**/*.$fileType"
+# find . -type f -path "$searchFolder"
+# foundFiles=$(find . -type f -path "$searchFolder")
 
-done
+# for file in $foundFiles ; do
+#     echo "file:  ${file}"
+#     echo "${file##*/}"
+
+# done
