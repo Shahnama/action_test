@@ -15,6 +15,7 @@ on:
         - major
       test_app:
         description: 'TestApp only '
+        default: true
         required: true
         type: boolean
 
