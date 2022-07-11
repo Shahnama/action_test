@@ -17,15 +17,6 @@ jobs:
     outputs:
       version: ${{ Steps.test_env.outputs.VERSION }}
     steps:
-      - uses: actions/checkout@v1
-      - name: Test envs
-        id: test_env
-        run: |
-              chmod +x ./test.sh
-              ./test.sh
-              echo ${{ steps.test_env.outputs.VERSION }}
- 
- 
       - name: Do Work
         run: |
           echo '::set-output name=FAV_NUMBER::3'
