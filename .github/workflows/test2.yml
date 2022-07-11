@@ -22,12 +22,11 @@ jobs:
       - name: "Create GitHub Release"
         id: create_guthub_release
         run: |
-          ls -la
           chmod +x ./scripts/makeRelease.sh
           ./scripts/makeRelease.sh
         
       - name: "Upload Bundles to GitHub-Release"
         env:
-          Asset_Id: ${{needs.create_guthub_release.outputs.ASSET_ID}}
+          Asset_Id: ${{steps.create_guthub_release.outputs.ASSET_ID}}
         run: |
           echo ${Asset_Id}
