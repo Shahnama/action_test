@@ -35,5 +35,6 @@ jobs:
               echo "FOO_STEP: $FOO_STEP"
               echo $VERSION
               echo ${{env.VERSION }}
+              echo ${{ steps.test_env.outputs.VERSION }}
         env:
           FOO_STEP: bar on step
