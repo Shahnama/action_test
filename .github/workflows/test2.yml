@@ -15,7 +15,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ Steps.test_env.outputs.VERSION }}
+          fav-animal: tiger
+          fav-number: ${{steps.abc.outputs.FAV_NUMBER}}
     steps:
       - name: Do Work
         run: |
@@ -27,7 +28,3 @@ jobs:
         run: |
           echo "${{steps.abc.outputs.FAV_NUMBER}}"
           echo "${{steps.abc.outputs.FAV_COLOR}}"
-          
-          outputs:
-              fav-animal: tiger
-              fav-number: ${{steps.abc.outputs.FAV_NUMBER}}
