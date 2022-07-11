@@ -19,6 +19,7 @@ jobs:
       - name: "Create GitHub Release"
         id: create_guthub_release
         run: |
+          ls -la
           chmod +x ./scripts/makeRelease.sh
           ./scripts/makeRelease.sh
         
