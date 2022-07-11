@@ -30,6 +30,7 @@ jobs:
               echo "FOO_ROOT: $FOO_ROOT"
               echo "FOO_JOB: $FOO_JOB" 
               echo "FOO_STEP: $FOO_STEP"
-              echo "VERSION: ${{ env.VERSION }}"
+              echo $VERSION
+              echo ${{env.VERSION }}
         env:
           FOO_STEP: bar on step
