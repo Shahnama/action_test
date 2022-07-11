@@ -16,6 +16,9 @@ jobs:
     runs-on: ubuntu-latest
           
     steps:
+      - name: Check-out sourcecode
+        uses: actions/checkout@v3
+        
       - name: "Create GitHub Release"
         id: create_guthub_release
         run: |
