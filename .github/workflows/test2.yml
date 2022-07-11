@@ -24,3 +24,19 @@ jobs:
               chmod +x ./test.sh
               ./test.sh
               echo ${{ steps.test_env.outputs.VERSION }}
+ 
+ 
+      - name: Do Work
+        run: |
+          echo '::set-output name=FAV_NUMBER::3'
+          echo '::set-output name=FAV_COLOR::blue'
+        id: abc
+      
+      - name: Read output
+        run: |
+          echo "${{steps.abc.outputs.FAV_NUMBER}}"
+          echo "${{steps.abc.outputs.FAV_COLOR}}"
+          
+          outputs:
+              fav-animal: tiger
+              fav-number: ${{steps.abc.outputs.FAV_NUMBER}}
