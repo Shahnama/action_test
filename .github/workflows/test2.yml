@@ -20,7 +20,7 @@ jobs:
 
         - name: "Test"
           run: |
-              echo "testVar: $testVar" 
+              echo "RELEASE_ID: $RELEASE_ID" 
               chmod +x ./test.sh
               ./test.sh
-              echo "testVar: $testVar" 
+              echo "RELEASE_ID: $RELEASE_ID" 
