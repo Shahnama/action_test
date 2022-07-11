@@ -16,11 +16,14 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ Steps.test_env.outputs.VERSION }}
     env:
       FOO_JOB: bar on job
     steps:
       - uses: actions/checkout@v1
       - name: Test envs
+        id: test_env
         run: |
               echo "FOO_ROOT: $FOO_ROOT"
               echo "FOO_JOB: $FOO_JOB" 
@@ -34,4 +37,3 @@ jobs:
               echo ${{env.VERSION }}
         env:
           FOO_STEP: bar on step
-          VERSION: a
