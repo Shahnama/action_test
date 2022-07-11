@@ -14,17 +14,16 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    outputs:
-          fav-animal: tiger
-          fav-number: ${{steps.abc.outputs.FAV_NUMBER}}
+          
     steps:
-      - name: Do Work
+      - name: "Create GitHub Release"
+        id: create_guthub_release
         run: |
-          echo '::set-output name=FAV_NUMBER::3'
-          echo '::set-output name=FAV_COLOR::blue'
-        id: abc
-      
-      - name: Read output
+          chmod +x ./scripts/makeRelease.sh
+          ./scripts/makeRelease.sh
+        
+      - name: "Upload Bundles to GitHub-Release"
+        env:
+          Asset_Id: ${{needs.create_guthub_release.outputs.ASSET_ID}}
         run: |
-          echo "${{steps.abc.outputs.FAV_NUMBER}}"
-          echo "${{steps.abc.outputs.FAV_COLOR}}"
+          echo ${Asset_Id}
