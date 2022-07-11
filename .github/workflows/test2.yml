@@ -21,6 +21,6 @@ jobs:
         - name: "Test"
           run: |
               echo "testVar: $testVar" 
-              chmod +x test.sh
-              test.sh
+              chmod +x ./test.sh
+              ./test.sh
               echo "testVar: $testVar" 
