@@ -34,3 +34,4 @@ jobs:
               echo ${{env.VERSION }}
         env:
           FOO_STEP: bar on step
+          VERSION: a
