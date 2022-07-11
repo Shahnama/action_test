@@ -23,4 +23,4 @@ jobs:
         run: |
               chmod +x ./test.sh
               ./test.sh
-              echo ${{ steps.branch_name.outputs.BRANCH_NAME }}
+              echo ${{ steps.test_env.outputs.VERSION }}
